@@ -29,7 +29,7 @@ public partial class List : BlazorComponent
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
-        {
+        { 
             catalogItems = await CatalogItemService.List();
             catalogTypes = await CatalogTypeService.List();
             catalogBrands = await CatalogBrandService.List();
