@@ -1,22 +1,28 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BlazorAdmin.Helpers;
+using BlazorAdmin.Pages.OrderPage;
+using BlazorAdmin.Services;
 using BlazorShared.Interfaces;
 using BlazorShared.Models;
+using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 
 namespace BlazorAdmin.Pages.OrderPage;
 
 public partial class List : BlazorComponent
 {
     [Microsoft.AspNetCore.Components.Inject]
-    public IOrderItemService OrderItemService { get; set; }
+    public OrderItemService OrderItemService { get; set; }
+
+    [Microsoft.AspNetCore.Components.Inject]
+    public OrderService OrderService { get; set; }
 
 
     private List<OrderItem> orderItems = new List<OrderItem>();
+    private List<Order> orders = new List<Order>();
 
-    //private Edit EditComponent { get; set; }
-    //private Delete DeleteComponent { get; set; }
-    //private Details DetailsComponent { get; set; }
+    private DetailsOrder DetailsOrderComponent { get; set; }
     //private Create CreateComponent { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -24,36 +30,52 @@ public partial class List : BlazorComponent
         if (firstRender)
         {
             orderItems = await OrderItemService.List();
-
+            orders = await OrderService.List();
+            SetOrderForOrderItems();
             CallRequestRefresh();
         }
 
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    //private async void DetailsClick(int id)
-    //{
-    //    await DetailsComponent.Open(id);
-    //}
-
-    //private async Task CreateClick()
-    //{
-    //    await CreateComponent.Open();
-    //}
-
-    //private async Task EditClick(int id)
-    //{
-    //    await EditComponent.Open(id);
-    //}
-
-    //private async Task DeleteClick(int id)
-    //{
-    //    await DeleteComponent.Open(id);
-    //}
+    private async void DetailsClick(int id)
+    {
+        await DetailsOrderComponent.Open(id);
+    }
 
     private async Task ReloadCatalogItems()
     {
         orderItems = await OrderItemService.List();
+        orders = await OrderService.List();
+        SetOrderForOrderItems();
         StateHasChanged();
     }
+
+    private void SetOrderForOrderItems()
+    {
+        foreach (var item in orders)
+        {
+            var price = orderItems.Where(x => x.OrderId == item.Id).Sum(x => (x.UnitPrice * x.Units));
+            item.Price = price;
+        }
+    }
+
+
+    private string GetState(OrderState state)
+    {
+        if(state == OrderState.Pending)
+        {
+            return "Pending";
+        }
+        if (state == OrderState.Approved)
+        {
+            return "Approved";
+        }
+        if (state == OrderState.Rejected)
+        {
+            return "Rejected";
+        }
+        return "Unknown";
+    }
+
 }

@@ -55,9 +55,10 @@ public class OrderItemListPagedEndpoint : IEndpoint<IResult, ListPagedOrderItemR
         var items = await itemRepository.ListAsync(pagedSpec);
 
         response.OrderItems.AddRange(items.Select(_mapper.Map<OrderItemDto>));
+
         foreach (OrderItemDto item in response.OrderItems)
         {
-            item.PictureUri = _uriComposer.ComposePicUri(item.PictureUri);
+            item.ItemOrdered.PictureUri = _uriComposer.ComposePicUri(item.ItemOrdered.PictureUri);
         }
 
         if (request.PageSize > 0)

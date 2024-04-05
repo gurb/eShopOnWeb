@@ -2,11 +2,16 @@
 
 public class OrderItemDto
 {
+    public ItemOrderedDto ItemOrdered { get; set; }
     public int Id { get; set; }
-    public string ProductName { get; set; }
-    public int CatalogId { get; set; }
-    public decimal Price { get; set; }
-    public string PictureUri { get; set; }
+    public decimal UnitPrice { get; set; }
     public int Units { get; set; }
-    public int OrderId { get; set; }
+}
+
+public class ItemOrderedDto
+{
+    public string PictureUri { get; set; }
+    public int CatalogItemId { get; set; }
+    public string ProductName { get; set; }
+
 }

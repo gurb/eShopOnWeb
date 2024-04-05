@@ -78,6 +78,10 @@ builder.Services.AddCors(options =>
             corsPolicyBuilder.WithOrigins(baseUrlConfig!.WebBase.Replace("host.docker.internal", "localhost").TrimEnd('/'));
             corsPolicyBuilder.AllowAnyMethod();
             corsPolicyBuilder.AllowAnyHeader();
+            corsPolicyBuilder.WithOrigins("https://localhost:44315",
+                                           "https://localhost:44339")
+                                                  .AllowAnyHeader()
+                                                  .AllowAnyMethod();
         });
 });
 

@@ -1,0 +1,123 @@
+﻿@inject ILogger<DetailsOrder> Logger
+@inject IJSRuntime JSRuntime
+@inject OrderService OrderService
+
+@inherits BlazorAdmin.Helpers.BlazorComponent
+
+@namespace BlazorAdmin.Pages.OrderPage
+
+<div class="modal @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Details @_item.BuyerId Orders</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @if (_item == null)
+                {
+                    <Spinner></Spinner>
+                }
+                else
+                {
+                    <div class="container">
+                        <div class="row">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>By</th>
+                                        <th>Price</th>
+                                        <th>State</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="cursor-pointer">
+                                    
+                                    @foreach (var item in OrderItems)
+                                    {
+                                        @* <tr>
+                                            <td>
+                                                <img class="img-thumbnail" src="@($"{item.ItemOrdered.PictureUri}")">
+                                            </td>
+                                            <td>@item.OrderDTO.OrderDate</td>
+                                            <td>@item.ItemOrdered.ProductName</td>
+                                            <td>@item.OrderDTO.By</td>
+                                            <td>@item.UnitPrice</td>
+                                            <td>@item.Units</td>
+                                            <td>durum</td>
+                                            <td>
+
+                                            </td>
+                                        </tr> *@
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Close">Close</button>
+                <button class="btn btn-primary" @onclick="EditClick">
+                    Edit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (_showDetailsModal)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    [Parameter]
+    public IEnumerable<OrderItem> OrderItems { get; set; }
+    [Parameter]
+    public IEnumerable<Order> Orders { get; set; }
+
+    // [Parameter]
+    // public EventCallback<int> OnEditClick { get; set; }
+
+    private string _modalDisplay = "none;";
+    private string _modalClass = "";
+    private bool _showDetailsModal = false;
+    private Order _item = new Order();
+
+    public async Task EditClick()
+    {
+        // await OnEditClick.InvokeAsync(_item.Id);
+        await Close();
+    }
+
+    public async Task Open(int id)
+    {
+        Logger.LogInformation("Now loading... /Order/Details/{Id}", id);
+
+        await new Css(JSRuntime).HideBodyOverflow();
+
+        _item = Orders.FirstOrDefault(x => x.Id == id) ?? new Order();
+
+        _modalDisplay = "block;";
+        _modalClass = "Show";
+        _showDetailsModal = true;
+
+        StateHasChanged();
+    }
+
+    public async Task Close()
+    {
+        await new Css(JSRuntime).ShowBodyOverflow();
+
+        _modalDisplay = "none";
+        _modalClass = "";
+        _showDetailsModal = false;
+    }
+}

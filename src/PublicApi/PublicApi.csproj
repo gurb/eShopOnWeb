@@ -36,5 +36,9 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="OrderEnpoints\" />
+  </ItemGroup>
+
 
 </Project>
