@@ -23,7 +23,6 @@ public partial class List : BlazorComponent
     private List<Order> orders = new List<Order>();
 
     private DetailsOrder DetailsOrderComponent { get; set; }
-    //private Create CreateComponent { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -43,7 +42,7 @@ public partial class List : BlazorComponent
         await DetailsOrderComponent.Open(id);
     }
 
-    private async Task ReloadCatalogItems()
+    private async Task ReloadOrders()
     {
         orderItems = await OrderItemService.List();
         orders = await OrderService.List();

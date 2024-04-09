@@ -6,6 +6,8 @@ public class OrderItemDto
     public int Id { get; set; }
     public decimal UnitPrice { get; set; }
     public int Units { get; set; }
+    public int OrderId { get; set; }
+
 }
 
 public class ItemOrderedDto

@@ -1,8 +1,7 @@
-﻿using Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 
-namespace Microsoft.eShopWeb.PublicApi.OrderItemEndpoints;
+namespace Microsoft.eShopWeb.PublicApi.OrderEndpoints;
 
 public class ListPagedOrderResponse: BaseResponse
 {

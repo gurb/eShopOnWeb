@@ -13,7 +13,6 @@ public class OrderItem
     public double UnitPrice { get; set; }
     public int Units { get; set; }
     public int OrderId { get; set; }
-
     public OrderDTO OrderDTO { get; set; }
 }
 

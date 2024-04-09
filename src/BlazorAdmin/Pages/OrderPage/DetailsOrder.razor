@@ -7,7 +7,7 @@
 @namespace BlazorAdmin.Pages.OrderPage
 
 <div class="modal @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Details @_item.BuyerId Orders</h5>
@@ -28,31 +28,24 @@
                             <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>By</th>
-                                        <th>Price</th>
-                                        <th>State</th>
-                                        <th>Actions</th>
+                                        <th></th>
+                                        <th>Product Name</th>
+                                        <th>Units</th>
+                                        <th>Unit Price</th>
                                     </tr>
                                 </thead>
                                 <tbody class="cursor-pointer">
                                     
                                     @foreach (var item in OrderItems)
                                     {
-                                        @* <tr>
+                                        <tr>
                                             <td>
                                                 <img class="img-thumbnail" src="@($"{item.ItemOrdered.PictureUri}")">
                                             </td>
-                                            <td>@item.OrderDTO.OrderDate</td>
                                             <td>@item.ItemOrdered.ProductName</td>
-                                            <td>@item.OrderDTO.By</td>
                                             <td>@item.UnitPrice</td>
                                             <td>@item.Units</td>
-                                            <td>durum</td>
-                                            <td>
-
-                                            </td>
-                                        </tr> *@
+                                        </tr>
                                     }
                                 </tbody>
                             </table>
@@ -64,9 +57,19 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Close">Close</button>
-                <button class="btn btn-primary" @onclick="EditClick">
-                    Edit
-                </button>
+                @if (_item.OrderState == OrderState.Approved)
+                {
+                    <button class="btn btn-primary" @onclick="ChangeState">
+                        Pending
+                    </button>                    
+                }
+                @if (_item.OrderState == OrderState.Pending)
+                {
+                    <button class="btn btn-primary" @onclick="ChangeState">
+                        Approve
+                    </button>
+                }
+
             </div>
         </div>
     </div>
@@ -78,22 +81,43 @@
 }
 
 @code {
+    [Microsoft.AspNetCore.Components.Inject]
+    public OrderService orderService { get; set; }
+
+
     [Parameter]
     public IEnumerable<OrderItem> OrderItems { get; set; }
     [Parameter]
     public IEnumerable<Order> Orders { get; set; }
 
-    // [Parameter]
-    // public EventCallback<int> OnEditClick { get; set; }
+    [Parameter]
+    public EventCallback<int> ReloadClick { get; set; }
 
     private string _modalDisplay = "none;";
     private string _modalClass = "";
     private bool _showDetailsModal = false;
     private Order _item = new Order();
 
-    public async Task EditClick()
+    public async Task ChangeState()
     {
-        // await OnEditClick.InvokeAsync(_item.Id);
+        if(_item.OrderState == OrderState.Approved)
+        {
+            _item.OrderState = OrderState.Pending;
+        } 
+        else
+        {
+            _item.OrderState = OrderState.Approved;
+        }
+
+        ChangeOrderStateRequest request = new ChangeOrderStateRequest
+        {
+            Id = _item.Id,
+            OrderState = _item.OrderState
+        };
+
+        await orderService.ChangeOrderState(request);
+        await ReloadClick.InvokeAsync();
+        StateHasChanged();
         await Close();
     }
 

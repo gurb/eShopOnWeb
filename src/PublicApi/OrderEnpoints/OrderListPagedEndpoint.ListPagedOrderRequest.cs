@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopWeb.PublicApi.OrderItemEndpoints;
+﻿namespace Microsoft.eShopWeb.PublicApi.OrderEndpoints;
 
 public class ListPagedOrderRequest : BaseRequest
 {

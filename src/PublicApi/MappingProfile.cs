@@ -4,6 +4,7 @@ using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.PublicApi.CatalogBrandEndpoints;
 using Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints;
 using Microsoft.eShopWeb.PublicApi.CatalogTypeEndpoints;
+using Microsoft.eShopWeb.PublicApi.OrderEndpoints;
 using Microsoft.eShopWeb.PublicApi.OrderItemEndpoints;
 
 namespace Microsoft.eShopWeb.PublicApi;

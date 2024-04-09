@@ -8,7 +8,7 @@ public class Order
     public string BuyerId { get; set; }
     public DateTimeOffset OrderDate { get; set; }
     public ShipToAddress ShipToAddress { get; set; }
-    public OrderState OrderState { get; private set; }
+    public OrderState OrderState { get; set; }
     public double Price { get; set; }
 }
 

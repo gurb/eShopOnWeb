@@ -1,7 +1,7 @@
 ﻿using System;
 using BlazorShared.Models;
 
-namespace Microsoft.eShopWeb.PublicApi.OrderItemEndpoints;
+namespace Microsoft.eShopWeb.PublicApi.OrderEndpoints;
 
 
 public class OrderDto

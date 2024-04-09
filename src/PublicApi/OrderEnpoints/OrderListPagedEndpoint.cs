@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,10 +10,11 @@ using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Specifications;
+using Microsoft.eShopWeb.PublicApi.OrderEndpoints;
 using Microsoft.eShopWeb.PublicApi.OrderItemEndpoints;
 using MinimalApi.Endpoint;
 
-namespace Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints;
+namespace Microsoft.eShopWeb.PublicApi.OrderEndpoints;
 
 /// <summary>
 /// List Catalog Items (paged)
@@ -50,8 +52,6 @@ public class OrderListPagedEndpoint : IEndpoint<IResult, ListPagedOrderRequest, 
         var items = await itemRepository.ListAsync();
 
         response.Orders.AddRange(items.Select(_mapper.Map<OrderDto>));
-
-        
 
         return Results.Ok(response);
     }

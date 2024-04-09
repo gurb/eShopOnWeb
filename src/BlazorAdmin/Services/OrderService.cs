@@ -35,4 +35,11 @@ public class OrderService
         return items;
     }
 
+    public async Task<BlazorShared.Models.Order> ChangeOrderState(ChangeOrderStateRequest request)
+    {
+        var response = await _httpService.HttpPost<ChangeOrderStateResponse>("order/change-state", request);
+        return response?.Order;
+    }
+
+
 }
